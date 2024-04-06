@@ -34,21 +34,25 @@ export class WidgetView extends BaseView {
         });
     }
 
+    // 其它组件触发了联动
     onModelLinkage(data) {
         console.log('onModelLinkage',data);
+        this.setState({
+            loading:true,
+        });
         this.loadAllData();
     }
 
     render() {
         return <div>
             <div>
-                demo widget data:{this.state.loading?'loading...':this.state.data}
+                demo widget:{this.props.widgetIndex} data:{this.state.loading?'loading...':this.state.data}
             </div>
             <button 
                 onClick={() => {
-                    this.setState({
-                        loading:true,
-                    });
+                    if(this.state.loading){
+                        return;
+                    }
                     const viewModel =this.props.viewModel;
                     viewModel.directLinkWidget();
                 }}

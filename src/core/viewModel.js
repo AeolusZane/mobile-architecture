@@ -7,6 +7,7 @@ import {
 
 const EVENT_NAMES = {
   DATA_LOADED: "dataLoaded",
+  LINKAGE: "linkage",
 };
 
 async function request(params) {
@@ -43,8 +44,14 @@ export class ViewModel extends BaseModel {
     store.dispatch(queryLinkageToWidgetMessage({ type: LINKAGE }));
   }
 
+  /**
+   * 这里做了点改造，finereact里是直接调用loadAllData
+   * 这里通过触发联动事件，通知其他组件联动状态发生了变化，其它组件监听到联动事件后再调用loadAllData
+   */
   triggerLinkageEvent(type) {
-    this.loadAllData(type);
+    this.triggerEvent(EVENT_NAMES.LINKAGE, {
+      type,
+    });
   }
 
   loadAllData(triggerType) {

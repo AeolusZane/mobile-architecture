@@ -6,7 +6,7 @@ import store from "./reducer/store";
 import {
   registerViewModel,
   setTemplateSharedDataPool,
-  registerModel
+  registerModel,
 } from "./reducer/sharedDataPoolSlice";
 
 export class TemplatePageModel extends BaseModel {
@@ -30,15 +30,19 @@ export class TemplatePageModel extends BaseModel {
   initModel() {
     const model = new Model();
     const sharedDataPool = new SharedDataPool();
+    const model1 = new Model();
     store.dispatch(registerModel(model));
+    store.dispatch(registerModel(model1));
     store.dispatch(setTemplateSharedDataPool(sharedDataPool));
   }
 
   initViewModel() {
+    console.log("initViewModel");
     const sharedDataPool = store.getState().sharedDataPool.sharedDataPool;
-    const model = store.getState().sharedDataPool.models[0];
-    const viewModel = new ViewModel(sharedDataPool, model);
-    console.log('initViewModel');
-    store.dispatch(registerViewModel(viewModel));
+    const models = store.getState().sharedDataPool.models;
+    models.forEach((model) => {
+      const viewModel = new ViewModel(sharedDataPool, model);
+      store.dispatch(registerViewModel(viewModel));
+    });
   }
 }
