@@ -1,6 +1,6 @@
 
 import { BaseView } from "./baseView";
-
+import store from "../reducer/store";
 export class WidgetView extends BaseView {
     constructor(props) { 
         super(props);
@@ -36,9 +36,7 @@ export class WidgetView extends BaseView {
 
     onModelLinkage(data) {
         console.log('onModelLinkage',data);
-        this.setState({
-            linkageData:data.data
-        })
+        this.loadAllData();
     }
 
     render() {
@@ -51,7 +49,8 @@ export class WidgetView extends BaseView {
                     this.setState({
                         loading:true,
                     });
-                    this.props.viewModel.directLinkWidget();
+                    const viewModel =this.props.viewModel;
+                    viewModel.directLinkWidget();
                 }}
             >
                 linkage click

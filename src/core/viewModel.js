@@ -1,4 +1,9 @@
 import { BaseModel } from "./baseModel";
+import store from "../reducer/store";
+import {
+  registerLinkageToWidgetMessage,
+  queryLinkageToWidgetMessage,
+} from "../reducer/sharedDataPoolSlice";
 
 const EVENT_NAMES = {
   DATA_LOADED: "dataLoaded",
@@ -9,29 +14,33 @@ async function request(params) {
     setTimeout(() => {
       resolve();
     }, 1000);
-  })
+  });
   return { widgetData: "widgetData" };
 }
 
-const LINKAGE = 'linkage'
+const LINKAGE = "linkage";
 
 export class ViewModel extends BaseModel {
-  constructor(sharedDataPool, model) {
+  constructor() {
     super();
-    this.sharedDataPool = sharedDataPool;
-    this.model = model; 
     // 注册联动回调
-    sharedDataPool.registerLinkageToWidgetMessage(this);
+    // sharedDataPool.registerLinkageToWidgetMessage(this); 之前是这样
+    store.dispatch(
+      registerLinkageToWidgetMessage({
+        viewModel: this,
+      })
+    );
   }
 
-  onReceiveLinkageWidgetMessage(msg = { type: LINKAGE }) {
+  onReceiveLinkageWidgetMessage = (msg = { type: LINKAGE }) => {
+    console.log('onReceiveLinkageWidgetMessage', msg)
     const { type } = msg;
     // 处理消息
     this.triggerLinkageEvent(type);
-  }
+  };
 
-  directLinkWidget(){
-    this.sharedDataPool.queryLinkageToWidgetMessage({ type: LINKAGE });
+  directLinkWidget() {
+    store.dispatch(queryLinkageToWidgetMessage({ type: LINKAGE }));
   }
 
   triggerLinkageEvent(type) {
@@ -47,7 +56,6 @@ export class ViewModel extends BaseModel {
       //这里model通过处理model获取请求参数
       // 请求获取的data
       const data = r.widgetData;
-
       this.triggerEvent(EVENT_NAMES.DATA_LOADED, {
         triggerType,
         data,

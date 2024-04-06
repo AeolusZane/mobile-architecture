@@ -1,6 +1,11 @@
 import { BaseView } from "./core/baseView";
 import { WidgetView } from "./core/widgetView";
+import store from "./reducer/store";
 import { TemplatePageModel } from "./templatePageModel";
+
+function getViewModels() {
+    return store.getState().sharedDataPool.viewModels;
+}
 
 export class TemplatePage extends BaseView {
     constructor() {
@@ -13,18 +18,27 @@ export class TemplatePage extends BaseView {
     }
 
     componentDidMount() {
-        this.bindModel(this.templatePageModel); // 绑定model，主要是触发refreshView
+        this.bindModel(this.templatePageModel); // 绑定model，主要是注册refreshView的回调
+        /**
+         * 这里创建了sharedDataPool和所有的model和viewModel
+         * 重构把这里的sharedDataPool注册到全局的store里
+         */
         this.templatePageModel.initData(); // init完毕后refreshView
     }
 
     renderTemplatePage() {
-        if (!this.templatePageModel.viewModel) {
+        const viewModels = getViewModels();
+        if (viewModels.length === 0) {
             return null;
         }
 
         return (
             <div>
-                <WidgetView viewModel={this.templatePageModel.viewModel} />
+                {viewModels.map((viewModel, index) => {
+                    return (
+                        <WidgetView key={index} viewModel={viewModel} widgetIndex={index}/>
+                    );
+                })}
             </div>
         );
     }
