@@ -5,8 +5,8 @@ export class WidgetView extends BaseView {
     constructor(props) { 
         super(props);
         this.state = {
-            linkageData:'',
-            data:''
+            data:'',
+            loading:true,
         }
     }
 
@@ -29,7 +29,8 @@ export class WidgetView extends BaseView {
     onModelDataLoaded({triggerType,data}) {
         console.log('onModelDataLoaded',triggerType, data);
         this.setState({
-            data:data
+            data:data,
+            loading:false,
         });
     }
 
@@ -43,18 +44,18 @@ export class WidgetView extends BaseView {
     render() {
         return <div>
             <div>
-                demo widget data:{this.state.data}
+                demo widget data:{this.state.loading?'loading...':this.state.data}
             </div>
             <button 
                 onClick={() => {
+                    this.setState({
+                        loading:true,
+                    });
                     this.props.viewModel.directLinkWidget();
                 }}
             >
                 linkage click
             </button>
-            <div>
-                {this.state.linkageData}
-            </div>
         </div>
     }
 }

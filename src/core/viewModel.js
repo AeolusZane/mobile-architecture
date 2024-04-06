@@ -35,10 +35,7 @@ export class ViewModel extends BaseModel {
   }
 
   triggerLinkageEvent(type) {
-    // 处理消息
-    this.triggerEvent(type,{
-      data:'linkageData'
-    });
+    this.loadAllData(type);
   }
 
   loadAllData(triggerType) {
