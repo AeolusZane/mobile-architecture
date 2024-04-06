@@ -1,5 +1,6 @@
 import { BaseModel } from "./core/baseModel";
 import { Model } from "./core/model";
+import { SharedDataPool } from "./core/sharedDataPool";
 import { ViewModel } from "./core/viewModel";
 
 export class TemplatePageModel extends BaseModel{
@@ -12,6 +13,11 @@ export class TemplatePageModel extends BaseModel{
 
     async initData(){
         const data = {widgetBean:'widgetBean'}
+        await new Promise((resolve) => {
+            setTimeout(() => {
+                resolve();
+            }, 1000);
+        });
         this.initModel(data);
         this.initViewModel();
 
@@ -20,6 +26,7 @@ export class TemplatePageModel extends BaseModel{
 
     initModel(){
         this.model = new Model();
+        this.sharedDataPool = new SharedDataPool();
     }
 
     initViewModel(){

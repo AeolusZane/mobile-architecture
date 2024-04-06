@@ -5,14 +5,40 @@ const EVENT_NAMES = {
 };
 
 async function request(params) {
+  await new Promise((resolve) => {
+    setTimeout(() => {
+      resolve();
+    }, 1000);
+  })
   return { widgetData: "widgetData" };
 }
+
+const LINKAGE = 'linkage'
 
 export class ViewModel extends BaseModel {
   constructor(sharedDataPool, model) {
     super();
     this.sharedDataPool = sharedDataPool;
-    this.model = model;
+    this.model = model; 
+    // 注册联动回调
+    sharedDataPool.registerLinkageToWidgetMessage(this);
+  }
+
+  onReceiveLinkageWidgetMessage(msg = { type: LINKAGE }) {
+    const { type } = msg;
+    // 处理消息
+    this.triggerLinkageEvent(type);
+  }
+
+  directLinkWidget(){
+    this.sharedDataPool.queryLinkageToWidgetMessage({ type: LINKAGE });
+  }
+
+  triggerLinkageEvent(type) {
+    // 处理消息
+    this.triggerEvent(type,{
+      data:'linkageData'
+    });
   }
 
   loadAllData(triggerType) {
@@ -32,15 +58,16 @@ export class ViewModel extends BaseModel {
     });
   }
 
-  getWidgetParams(){ 
-    function processModel (sharedDataPool,model){ // 利用model和shareDataPool做计算获取请求参数
+  getWidgetParams() {
+    function processModel(sharedDataPool, model) {
+      // 利用model和shareDataPool做计算获取请求参数
       return {
         model,
-        sharedDataPool
-      }
+        sharedDataPool,
+      };
     }
-    const params = processModel(this.sharedDataPool,this.model);
+    const params = processModel(this.sharedDataPool, this.model);
 
-    return params
+    return params;
   }
 }

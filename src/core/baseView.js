@@ -21,11 +21,14 @@ export class BaseView extends Component {
     }
 
     onReceiveEventMessage(data) { 
-        console.log('onReceiveEventMessage', data);
         const eventName = data.eventName;
         const funcName = 'onModel' + eventName.substring(0, 1).toUpperCase() + eventName.substring(1);
-        const args = data.data;
-        this[funcName](args);
-        this.props[funcName](args);
+        try{
+            const args = data.data;
+            this[funcName](args);
+            this.props[funcName]?.(args);
+        }catch(e){
+            console.error('onReceiveEventMessage', funcName,e);
+        }
     }
 }
