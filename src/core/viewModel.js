@@ -4,12 +4,13 @@ const EVENT_NAMES = {
   DATA_LOADED: "dataLoaded",
 };
 
-async function request(model) {
+async function request(params) {
   return { widgetData: "widgetData" };
 }
 
 export class ViewModel extends BaseModel {
   constructor(sharedDataPool, model) {
+    super();
     this.sharedDataPool = sharedDataPool;
     this.model = model;
   }
