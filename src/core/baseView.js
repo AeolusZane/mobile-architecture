@@ -9,7 +9,7 @@ export class BaseView extends Component {
         viewModel.modelSignal.subscribeNext((message) => {
             if(message.type === 'refresh'){
                 console.log('refresh')
-                this.onReceiveRefreshMessage(message.data);
+                this.onReceiveRefreshMessage();
             }else{
                 console.log('event')
                 this.onReceiveEventMessage(message);
