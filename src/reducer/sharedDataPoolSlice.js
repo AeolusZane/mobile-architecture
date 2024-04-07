@@ -17,11 +17,15 @@ export const sharedDataPoolSlice = createSlice({
   initialState,
   reducers: {
     setTemplateSharedDataPool: (state, action) => {
+      state.models = [];
+      state.viewModels = [];
       state.templateSharedDataPool = action.payload;
       state.sharedDataPool = action.payload;
     },
 
     setWidgetSharedDataPool: (state, action) => {
+      state.models = [];
+      state.viewModels = [];
       state.widgetSharedDataPool = action.payload;
       state.sharedDataPool = action.payload;
     },

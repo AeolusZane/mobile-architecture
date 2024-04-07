@@ -28,12 +28,12 @@ export class TemplatePageModel extends BaseModel {
   }
 
   initModel() {
-    const model = new Model();
     const sharedDataPool = new SharedDataPool();
+    store.dispatch(setTemplateSharedDataPool(sharedDataPool));
+    const model = new Model();
     const model1 = new Model();
     store.dispatch(registerModel(model));
     store.dispatch(registerModel(model1));
-    store.dispatch(setTemplateSharedDataPool(sharedDataPool));
   }
 
   initViewModel() {
